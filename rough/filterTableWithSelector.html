@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"
+    ></script>
+    <title>Filter Selector Search</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var products = [
+        {
+          id: "100",
+          name: "iPhone 4S",
+          brand: "Apple",
+          os: "iOS",
+        },
+        {
+          id: "101",
+          name: "Moto X",
+          brand: "Motorola",
+          os: "Android",
+        },
+        {
+          id: "102",
+          name: "iPhone 6",
+          brand: "Apple",
+          os: "iOS",
+        },
+        {
+          id: "103",
+          name: "Samsung Galaxy S",
+          brand: "Samsung",
+          os: "Android",
+        },
+        {
+          id: "104",
+          name: "Google Nexus",
+          brand: "ASUS",
+          os: "Android",
+        },
+        {
+          id: "105",
+          name: "Surface",
+          brand: "Microsoft",
+          os: "Windows",
+        },
+      ];
+      $(document).ready(function () {
+          display();
+        $("#os,#brand").on("change", function () {
+          var OS = $("#os").find("option:selected").val();
+        //   console.log(OS);
+          var BRAND = $("#brand").find("option:selected").val();
+        //   console.log(BRAND);
+          SearchData(OS, BRAND);
+        });
+        $("#searching").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#table11 tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+
+  $(document).on("click", ".remove", function () {
+          var id = this.id;
+          $(`#${id}`).parent().hide();
+        });
+      });
+      function SearchData(OS, BRAND) {
+        if (OS.toUpperCase() == "ALL" && BRAND.toUpperCase() == "ALL") {
+          $("#table11 tbody tr").show();
+        } else {
+          $("#table11 tbody tr:has(td)").each(function () {
+            var rowOS = $.trim($(this).find("td:eq(3)").text());
+            console.log(rowOS);
+            var rowBRAND = $.trim($(this).find("td:eq(2)").text());
+            console.log(rowBRAND);
+            if (OS.toUpperCase() != "ALL" && BRAND.toUpperCase() != "ALL") {
+              if (
+                rowOS.toUpperCase() == OS.toUpperCase() &&
+                rowBRAND == BRAND
+              ) {
+                $(this).show();
+              } else {
+                $(this).hide();
+              }
+            } else if (
+              $(this).find("td:eq(1)").text() != "" ||
+              $(this).find("td:eq(1)").text() != ""
+            ) {
+              if (OS != "all") {
+                if (rowOS.toUpperCase() == OS.toUpperCase()) {
+                  $(this).show();
+                } else {
+                  $(this).hide();
+                }
+              }
+              if (BRAND != "all") {
+                if (rowBRAND == BRAND) {
+                  $(this).show();
+                } else {
+                  $(this).hide();
+                }
+              }
+            }
+          });
+        }
+      }
+      var head = `<tr>
+        <th>id</th>
+        <th>name</th>
+        <th>brand</th>
+        <th>os</th>
+        <th>Remove</th>
+    </tr>`;
+      function display() {
+        var sheet = ``;
+        products.forEach((element) => {
+            sheet += ` <tr>
+        <td>${element.id}</td>
+        <td>${element.name}</td>
+        <td>${element.brand}</td>
+        <td>${element.os}</td>
+        <td class="remove" id="${element.id}">X</td>
+      </tr>`;
+        });
+        document.getElementById("table11").innerHTML= head + sheet;
+      }
+    </script>
+    <select class="cl_OS" id="os">
+      <option value="all">Select OS</option>
+      <option value="Android">Android</option>
+      <option value="iOS">iOS</option>
+      <option value="windows">windows</option>
+    </select>
+    <select class="cl_brand" id="brand">
+      <option value="all">Select brand</option>
+      <option value="Microsoft">Microsoft</option>
+      <option value="Motorola">Motorola</option>
+      <option value="Apple">Apple</option>
+      <option value="ASUS">ASUS</option>
+      <option value="Samsung">Samsung</option>
+
+
+    </select>
+    <table style="width: 100%" id="table11" border="1"></table>
+    <input type="text" id="searching" placeholder="Search desire.....">
+     
+  </body>
+</html>
